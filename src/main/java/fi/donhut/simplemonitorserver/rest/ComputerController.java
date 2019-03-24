@@ -15,16 +15,16 @@
  */
 package fi.donhut.simplemonitorserver.rest;
 
+import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
 import fi.donhut.simplemonitorserver.model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
 
 /**
  * REST API to receive outside source's data.
@@ -33,14 +33,14 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping("/api/v1")
-public class PcController {
+public class ComputerController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PcController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ComputerController.class);
 
     @PostMapping("/pc")
-    public ResponseEntity<String> receivePcData(@RequestBody final Computer computer) {
-        computer.setLastReceivedTime(LocalDateTime.now());
-        LOG.debug("Received: {}", computer);
-        return ResponseEntity.ok(computer.toString());
+    public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
+        LOG.debug("Received data: {}", computer);
+        UnderMonitorCache.addComputer(computer);
+        return ResponseEntity.ok().build();
     }
 }

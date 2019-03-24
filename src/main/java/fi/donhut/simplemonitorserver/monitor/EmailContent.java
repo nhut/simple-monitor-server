@@ -13,36 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fi.donhut.simplemonitorserver.model;
+package fi.donhut.simplemonitorserver.monitor;
 
+import fi.donhut.simplemonitorserver.model.Computer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * Model.
- *
  * @author Nhut Do (mr.nhut@gmail.com)
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@ToString
-public class Computer implements Serializable {
+@Setter
+public class EmailContent {
 
-    private static final long serialVersionUID = -9088154767294581258L;
-
-    @NotNull
-    private String name;
-    private String ipAddress;
-    private Double cpuLoadPercent;
-    private Double memoryUsageInBytes;
-    private Long freeSpaceLeftInBytes;
-    private LocalDateTime lastReceivedTime = LocalDateTime.now();
-
+    private Computer computer;
+    private LocalDateTime triggerTime;
+    private String emailMessageToSend;
+    private LocalDateTime goneOfflineTime; // Email sending data.
+    private LocalDateTime recoverTime;
 }
