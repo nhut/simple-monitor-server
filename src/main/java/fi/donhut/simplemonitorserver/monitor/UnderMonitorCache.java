@@ -31,20 +31,26 @@ public final class UnderMonitorCache {
 
     private static final Logger LOG = LoggerFactory.getLogger(UnderMonitorCache.class);
 
+    private static final UnderMonitorCache INSTANCE = new UnderMonitorCache();
     private static final int MAX_COMPUTER_TO_MONITOR = 1000000;
-    private static final Map<String, MonitorData> monitorData = new HashMap<>(); //key: computerName, value: Monitordata-class.
+    private final Map<String, MonitorData> cache = new HashMap<>(); //key: computerName, value: Monitordata-class.
 
-    private UnderMonitorCache() {
+    public static UnderMonitorCache getInstance() {
+        return INSTANCE;
     }
 
-    public static void addComputer(final Computer computer) {
+    public Map<String, MonitorData> getCache() {
+        return cache;
+    }
+
+    public void add(final Computer computer) {
         final String computerName = computer.getName();
-        final MonitorData prevMonitorData = UnderMonitorCache.monitorData.get(computerName);
-        if (prevMonitorData != null && UnderMonitorCache.monitorData.size() >= MAX_COMPUTER_TO_MONITOR) {
+        final MonitorData prevMonitorData = cache.get(computerName);
+        if (prevMonitorData != null && cache.size() >= MAX_COMPUTER_TO_MONITOR) {
             LOG.warn("Rejected (cache limit exceeded: {} pcs) to monitor new computer: {}",
                     MAX_COMPUTER_TO_MONITOR, computer);
             return;
         }
-        UnderMonitorCache.monitorData.put(computerName, new MonitorData(computer, NetworkStatus.ONLINE));
+        cache.put(computerName, new MonitorData(computer, NetworkStatus.ONLINE));
     }
 }

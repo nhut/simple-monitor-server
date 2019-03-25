@@ -18,6 +18,7 @@ package fi.donhut.simplemonitorserver.monitor;
 import fi.donhut.simplemonitorserver.model.Computer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Nhut Do (mr.nhut@gmail.com)
@@ -27,5 +28,6 @@ import lombok.Getter;
 public class MonitorData {
 
     private Computer computer;
+    @Setter
     private NetworkStatus networkStatus;
 }

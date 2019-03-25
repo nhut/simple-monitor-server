@@ -17,7 +17,7 @@ package fi.donhut.simplemonitorserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Main application.
@@ -25,11 +25,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @author Nhut Do (mr.nhut@gmail.com)
  */
 @SpringBootApplication
-@EnableConfigurationProperties
+@EnableScheduling
 public class SimpleMonitorServerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleMonitorServerApplication.class, args);
 	}
-
 }

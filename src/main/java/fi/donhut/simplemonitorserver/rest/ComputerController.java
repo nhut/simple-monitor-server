@@ -15,8 +15,10 @@
  */
 package fi.donhut.simplemonitorserver.rest;
 
-import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
 import fi.donhut.simplemonitorserver.model.Computer;
+import fi.donhut.simplemonitorserver.monitor.MonitorData;
+import fi.donhut.simplemonitorserver.monitor.NetworkStatus;
+import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * REST API to receive outside source's data.
@@ -37,10 +41,21 @@ public class ComputerController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComputerController.class);
 
+    private final UnderMonitorCache underMonitorCache = UnderMonitorCache.getInstance();
+
     @PostMapping("/pc")
     public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
-        LOG.debug("Received data: {}", computer);
-        UnderMonitorCache.addComputer(computer);
+        @NotNull final String computerName = computer.getName();
+        LOG.debug("Received new data from: {}", LOG.isTraceEnabled() ? computer : computerName);
+        if (isComputerBackOnline(computer)) {
+            LOG.info("{} is back ONLINE!", computerName);
+        }
+        underMonitorCache.add(computer);
         return ResponseEntity.ok().build();
+    }
+
+    private boolean isComputerBackOnline(final Computer computer) {
+        final MonitorData prevMonitorData = underMonitorCache.getCache().get(computer.getName());
+        return prevMonitorData.getNetworkStatus() == NetworkStatus.OFFLINE;
     }
 }
