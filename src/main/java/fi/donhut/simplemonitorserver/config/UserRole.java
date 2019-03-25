@@ -22,5 +22,6 @@ package fi.donhut.simplemonitorserver.config;
  */
 public enum UserRole {
 
-    API
+    API,
+    SWAGGER
 }

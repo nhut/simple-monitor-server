@@ -47,10 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private String allowUserPassword;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder managerBuilder) throws Exception{
+    protected void configure(AuthenticationManagerBuilder managerBuilder) throws Exception {
         managerBuilder.inMemoryAuthentication()
                 .withUser(allowUsername).password(passwordEncoder.encode(allowUserPassword))
-                .roles(UserRole.API.toString());
+                .roles(UserRole.API.toString(), UserRole.SWAGGER.toString());
     }
 
     @Override
@@ -58,10 +58,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.httpBasic().and().authorizeRequests()
                 .antMatchers("/api/**").hasRole(UserRole.API.toString())
                 .and().csrf().disable();
+
+        httpSecurity.authorizeRequests()
+                .antMatchers("/swagger-resources/*", "/swagger-ui.html", "/api/v1/swagger.json")
+                .hasRole("SWAGGER")
+                .anyRequest()
+                .authenticated();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
