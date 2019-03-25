@@ -56,6 +56,9 @@ public class ComputerController {
 
     private boolean isComputerBackOnline(final Computer computer) {
         final MonitorData prevMonitorData = underMonitorCache.getCache().get(computer.getName());
+        if (prevMonitorData == null) {
+            return false;
+        }
         return prevMonitorData.getNetworkStatus() == NetworkStatus.OFFLINE;
     }
 }
