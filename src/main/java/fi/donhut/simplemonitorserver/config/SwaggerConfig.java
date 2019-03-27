@@ -15,12 +15,16 @@
  */
 package fi.donhut.simplemonitorserver.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -31,26 +35,33 @@ import java.util.Collections;
  * - <a href="http://localhost/v2/api-docs">API schema</a><br>
  * - <a href="http://localhost/swagger-ui.html">API UI documentation</a><br>
  * <br>
+ *
  * @author Nhut Do (mr.nhut@gmail.com)
  */
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig {
 
+    @Autowired
+    private Environment environment;
+
     @Value("${spring.application.name}")
     private String appName;
 
     @Bean
     public Docket api() {
-        final String apiDocTitle = appName + " API";
-        return new Docket(DocumentationType.SWAGGER_2)
+        final ApiSelectorBuilder apiSelectorBuilder = new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any()) //limit which package content will be shown in api
-                .paths(input -> input != null && input.startsWith("/api")) //limit which rest url api will be exposed
-                .build()
+                .apis(RequestHandlerSelectors.any()); //limit which package content will be shown in api
+        final boolean hasDevProfile = environment.acceptsProfiles(Profiles.of("dev"));
+        if (!hasDevProfile) {
+            apiSelectorBuilder.paths(input -> input != null && input.startsWith("/api")); //limit which rest url api will be exposed
+        }
+
+        return apiSelectorBuilder.build()
                 .forCodeGeneration(true)
                 .apiInfo(new ApiInfo(
-                        apiDocTitle,
+                        appName + " API",
                         "This is swagger schema is for client codegen only. Check the official documentation here: /swagger-ui.html",
                         "v1",
                         "https://github.com/nhut/simple-monitor-server/blob/master/LICENSE",
