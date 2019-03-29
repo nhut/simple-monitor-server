@@ -20,8 +20,8 @@ package fi.donhut.simplemonitorserver.config;
  *
  * @author Nhut Do (mr.nhut@gmail.com)
  */
-public enum UserRole {
+interface UserRole {
 
-    API,
-    SWAGGER
+    String ADMIN = "ADMIN";
+    String API = "API";
 }

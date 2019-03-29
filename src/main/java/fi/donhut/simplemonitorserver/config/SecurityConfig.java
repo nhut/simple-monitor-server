@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -33,37 +32,44 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author Nhut Do (mr.nhut@gmail.com)
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${app.security.admin.username}")
+    private String userAdminUsername;
+
+    @Value("${app.security.admin.password}")
+    private String userAdminPassword;
+
     @Value("${app.security.api.username}")
-    private String allowUsername;
+    private String userApiUsername;
 
     @Value("${app.security.api.password}")
-    private String allowUserPassword;
+    private String userApiPassword;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder managerBuilder) throws Exception {
-        managerBuilder.inMemoryAuthentication()
-                .withUser(allowUsername).password(passwordEncoder.encode(allowUserPassword))
-                .roles(UserRole.API.toString(), UserRole.SWAGGER.toString());
+    protected void configure(AuthenticationManagerBuilder authBuilder) throws Exception {
+        authBuilder.inMemoryAuthentication()
+                .withUser(userAdminUsername).password(passwordEncoder.encode(userAdminPassword)).roles(UserRole.ADMIN)
+                .and()
+                .withUser(userApiUsername).password(passwordEncoder.encode(userApiPassword)).roles(UserRole.API)
+        ;
     }
 
     @Override
-    protected void configure(final HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.httpBasic().and().authorizeRequests()
-                .antMatchers("/api/**").hasRole(UserRole.API.toString())
-                .and().csrf().disable();
+    protected void configure(final HttpSecurity http) throws Exception {
+        http.csrf().disable();
 
-        httpSecurity.authorizeRequests()
-                .antMatchers("/swagger-resources/*", "/swagger-ui.html", "/api/v1/swagger.json")
-                .hasRole("SWAGGER")
-                .anyRequest()
-                .authenticated();
+        http.authorizeRequests()
+                .antMatchers("/actuator/health").permitAll()
+                .antMatchers("/actuator/", "/actuator/info").hasRole(UserRole.ADMIN)
+                .antMatchers("/api/**").hasRole(UserRole.API)
+                .antMatchers("/swagger-resources/*", "/swagger-ui.html", "/api/v1/swagger.json").fullyAuthenticated()
+                .anyRequest().fullyAuthenticated()
+                .and().httpBasic();
     }
 
     @Bean
