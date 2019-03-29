@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +43,7 @@ public class ComputerController {
 
     private final UnderMonitorCache underMonitorCache = UnderMonitorCache.getInstance();
 
-    @PostMapping("/pc")
+    @PutMapping("/pc")
     public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
         @NotNull final String computerName = computer.getName();
         LOG.debug("Received new data from: {}", LOG.isTraceEnabled() ? computer : computerName);
