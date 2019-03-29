@@ -16,18 +16,29 @@
 package fi.donhut.simplemonitorserver.monitor;
 
 import fi.donhut.simplemonitorserver.model.Computer;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Nhut Do (mr.nhut@gmail.com)
  */
-@AllArgsConstructor
-@Getter
 public class MonitorData {
 
     private Computer computer;
-    @Setter
     private NetworkStatus networkStatus;
+
+    public MonitorData(Computer computer, NetworkStatus networkStatus) {
+        this.computer = computer;
+        this.networkStatus = networkStatus;
+    }
+
+    public Computer getComputer() {
+        return computer;
+    }
+
+    public NetworkStatus getNetworkStatus() {
+        return networkStatus;
+    }
+
+    public void setNetworkStatus(NetworkStatus networkStatus) {
+        this.networkStatus = networkStatus;
+    }
 }
