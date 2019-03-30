@@ -15,10 +15,13 @@
  */
 package fi.donhut.simplemonitorserver.rest;
 
+import fi.donhut.simplemonitorserver.Constants;
 import fi.donhut.simplemonitorserver.model.Computer;
 import fi.donhut.simplemonitorserver.monitor.MonitorData;
 import fi.donhut.simplemonitorserver.monitor.NetworkStatus;
 import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +47,8 @@ public class ComputerController {
     private final UnderMonitorCache underMonitorCache = UnderMonitorCache.getInstance();
 
     @PutMapping("/pc")
+    @ApiOperation(value = "Receives client sent data.",
+            authorizations = {@Authorization(value= Constants.APP_BASIC_AUTH_ID)})
     public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
         @NotNull final String computerName = computer.getName();
         LOG.debug("Received new data from: {}", LOG.isTraceEnabled() ? computer : computerName);

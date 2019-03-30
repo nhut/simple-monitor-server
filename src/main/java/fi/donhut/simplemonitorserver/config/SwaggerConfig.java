@@ -15,6 +15,7 @@
  */
 package fi.donhut.simplemonitorserver.config;
 
+import fi.donhut.simplemonitorserver.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.BasicAuth;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -50,14 +52,18 @@ public class SwaggerConfig {
     @Value("${spring.application.name}")
     private String appName;
 
+    @Value("${swagger.api.show-all:false}")
+    private boolean showAll;
+
     @Bean
     public Docket api() {
         final ApiSelectorBuilder apiSelectorBuilder = new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any()); //limit which package content will be shown in api
         final boolean hasDevProfile = Arrays.asList(environment.getActiveProfiles()).contains("dev");
-        if (!hasDevProfile) {
-            apiSelectorBuilder.paths(input -> input != null && input.startsWith("/api")); //limit which rest url api will be exposed
+        if (!(hasDevProfile && showAll)) {
+            apiSelectorBuilder.paths(input -> input != null &&
+                    (input.startsWith("/api") || input.startsWith("/actuator/health"))); //limit which rest url api will be exposed
         }
 
         return apiSelectorBuilder.build()
@@ -70,6 +76,7 @@ public class SwaggerConfig {
                         null,
                         "License of API",
                         "https://github.com/nhut/simple-monitor-server/blob/master/LICENSE",
-                        Collections.emptyList()));
+                        Collections.emptyList()))
+                .securitySchemes(Collections.singletonList(new BasicAuth(Constants.APP_BASIC_AUTH_ID)));
     }
 }

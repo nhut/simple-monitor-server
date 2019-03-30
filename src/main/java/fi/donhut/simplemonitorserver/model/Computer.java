@@ -15,6 +15,8 @@
  */
 package fi.donhut.simplemonitorserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -34,6 +36,7 @@ public class Computer implements Serializable {
     private Double cpuLoadPercent;
     private Double memoryUsageInBytes;
     private Long freeSpaceLeftInBytes;
+    @JsonIgnore
     private LocalDateTime lastReceivedTime = LocalDateTime.now();
 
     public String getName() {
