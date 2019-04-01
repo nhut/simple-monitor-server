@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fi.donhut.simplemonitorserver;
+package fi.donhut.simplemonitorserver.email;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import fi.donhut.simplemonitorserver.monitor.MonitorData;
 
 /**
- * Main application.
+ * Provides email services.
  *
  * @author Nhut Do (mr.nhut@gmail.com)
  */
-@SpringBootApplication
-@EnableScheduling
-@EnableAsync
-public class SimpleMonitorServerApplication {
+public interface EmailService {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SimpleMonitorServerApplication.class, args);
-	}
+    /**
+     * Sends email using {@link MonitorData}.
+     *
+     * @param monitorData {@link MonitorData}.
+     * @param msgContent Message content.
+     */
+    public void sendEmail(final MonitorData monitorData, final String msgContent);
 }

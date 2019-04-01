@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.StringJoiner;
 
 /**
  * Model.
@@ -83,7 +84,15 @@ public class Computer implements Serializable {
         this.freeSpaceLeftInBytes = freeSpaceLeftInBytes;
     }
 
-    public void setLastReceivedTime(LocalDateTime lastReceivedTime) {
-        this.lastReceivedTime = lastReceivedTime;
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Computer.class.getSimpleName() + "[", "]")
+                .add("name='" + name + "'")
+                .add("ipAddress='" + ipAddress + "'")
+                .add("cpuLoadPercent=" + cpuLoadPercent)
+                .add("memoryUsageInBytes=" + memoryUsageInBytes)
+                .add("freeSpaceLeftInBytes=" + freeSpaceLeftInBytes)
+                .add("lastReceivedTime=" + lastReceivedTime)
+                .toString();
     }
 }

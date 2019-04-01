@@ -15,12 +15,14 @@
  */
 package fi.donhut.simplemonitorserver.scheduler;
 
+import fi.donhut.simplemonitorserver.email.EmailService;
 import fi.donhut.simplemonitorserver.model.Computer;
 import fi.donhut.simplemonitorserver.monitor.MonitorData;
 import fi.donhut.simplemonitorserver.monitor.NetworkStatus;
 import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,9 @@ public final class OfflineMonitorTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(OfflineMonitorTask.class);
 
+    @Autowired
+    private EmailService emailService;
+
     @Value("${app.monitor.count-as-offline.seconds}")
     private int seconds;
 
@@ -51,7 +56,10 @@ public final class OfflineMonitorTask {
                 final LocalDateTime lastDataReceived = computer.getLastReceivedTime();
                 if (isGoneOffline(lastDataReceived)) {
                     monitorData.setNetworkStatus(NetworkStatus.OFFLINE);
-                    LOG.info("{} have gone OFFLINE! Last received data: {}", computer.getName(), lastDataReceived);
+                    final String infoText = String.format(
+                            "Have gone OFFLINE! Last received data: %s", lastDataReceived);
+                    LOG.info("{}: {}", computer.getName(), infoText);
+                    emailService.sendEmail(monitorData, infoText);
                 }
             }
         }

@@ -16,6 +16,7 @@
 package fi.donhut.simplemonitorserver.rest;
 
 import fi.donhut.simplemonitorserver.Constants;
+import fi.donhut.simplemonitorserver.email.EmailService;
 import fi.donhut.simplemonitorserver.model.Computer;
 import fi.donhut.simplemonitorserver.monitor.MonitorData;
 import fi.donhut.simplemonitorserver.monitor.NetworkStatus;
@@ -24,6 +25,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,21 +48,31 @@ public class ComputerController {
 
     private final UnderMonitorCache underMonitorCache = UnderMonitorCache.getInstance();
 
+    @Autowired
+    private EmailService emailService;
+
     @PutMapping("/pc")
     @ApiOperation(value = "Receives client sent data.",
             authorizations = {@Authorization(value= Constants.APP_BASIC_AUTH_ID)})
     public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
         @NotNull final String computerName = computer.getName();
         LOG.debug("Received new data from: {}", LOG.isTraceEnabled() ? computer : computerName);
-        if (isComputerBackOnline(computer)) {
-            LOG.info("{} is back ONLINE!", computerName);
-        }
+        final boolean computerBackOnline = isComputerBackOnline(computerName);
         underMonitorCache.add(computer);
+        if (computerBackOnline) {
+            final String infoText = "Is back ONLINE!";
+            LOG.info("{}: {}", computerName, infoText);
+            emailService.sendEmail(getMonitorDataFromCache(computerName), infoText);
+        }
         return ResponseEntity.ok().build();
     }
 
-    private boolean isComputerBackOnline(final Computer computer) {
-        final MonitorData prevMonitorData = underMonitorCache.getCache().get(computer.getName());
+    private MonitorData getMonitorDataFromCache(final String computerName) {
+        return underMonitorCache.getCache().get(computerName);
+    }
+
+    private boolean isComputerBackOnline(final String computerName) {
+        final MonitorData prevMonitorData = getMonitorDataFromCache(computerName);
         if (prevMonitorData == null) {
             return false;
         }

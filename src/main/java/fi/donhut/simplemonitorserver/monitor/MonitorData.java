@@ -17,6 +17,8 @@ package fi.donhut.simplemonitorserver.monitor;
 
 import fi.donhut.simplemonitorserver.model.Computer;
 
+import java.util.StringJoiner;
+
 /**
  * @author Nhut Do (mr.nhut@gmail.com)
  */
@@ -38,7 +40,15 @@ public class MonitorData {
         return networkStatus;
     }
 
-    public void setNetworkStatus(NetworkStatus networkStatus) {
+    synchronized public void setNetworkStatus(NetworkStatus networkStatus) {
         this.networkStatus = networkStatus;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MonitorData.class.getSimpleName() + "[", "]")
+                .add("computer=" + computer)
+                .add("networkStatus=" + networkStatus)
+                .toString();
     }
 }

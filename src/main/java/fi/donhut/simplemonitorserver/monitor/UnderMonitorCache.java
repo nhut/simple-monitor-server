@@ -51,6 +51,7 @@ public final class UnderMonitorCache {
                     MAX_COMPUTER_TO_MONITOR, computer);
             return;
         }
+
         cache.put(computerName, new MonitorData(computer, NetworkStatus.ONLINE));
     }
 }
