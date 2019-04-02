@@ -35,7 +35,7 @@ public class Computer implements Serializable {
     private String name;
     private String ipAddress;
     private Double cpuLoadPercent;
-    private Double memoryUsageInBytes;
+    private Long memoryUsageInBytes;
     private Long freeSpaceLeftInBytes;
     @JsonIgnore
     private LocalDateTime lastReceivedTime = LocalDateTime.now();
@@ -52,7 +52,7 @@ public class Computer implements Serializable {
         return cpuLoadPercent;
     }
 
-    public Double getMemoryUsageInBytes() {
+    public Long getMemoryUsageInBytes() {
         return memoryUsageInBytes;
     }
 
@@ -76,7 +76,7 @@ public class Computer implements Serializable {
         this.cpuLoadPercent = cpuLoadPercent;
     }
 
-    public void setMemoryUsageInBytes(Double memoryUsageInBytes) {
+    public void setMemoryUsageInBytes(Long memoryUsageInBytes) {
         this.memoryUsageInBytes = memoryUsageInBytes;
     }
 
