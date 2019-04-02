@@ -84,6 +84,10 @@ public class Computer implements Serializable {
         this.freeSpaceLeftInBytes = freeSpaceLeftInBytes;
     }
 
+    public void setLastReceivedTime(LocalDateTime lastReceivedTime) {
+        this.lastReceivedTime = lastReceivedTime;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", Computer.class.getSimpleName() + "[", "]")

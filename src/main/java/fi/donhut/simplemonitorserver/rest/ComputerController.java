@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * REST API to receive outside source's data.
@@ -54,8 +56,9 @@ public class ComputerController {
     @PutMapping("/pc")
     @ApiOperation(value = "Receives client sent data.",
             authorizations = {@Authorization(value= Constants.APP_BASIC_AUTH_ID)})
-    public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
-        @NotNull final String computerName = computer.getName();
+    public ResponseEntity<Void> receivePcData(@NotNull @Validated @RequestBody final Computer computer) {
+        computer.setLastReceivedTime(LocalDateTime.now());
+        final String computerName = computer.getName();
         LOG.debug("Received new data from: {}", LOG.isTraceEnabled() ? computer : computerName);
         final boolean computerBackOnline = isComputerBackOnline(computerName);
         underMonitorCache.add(computer);

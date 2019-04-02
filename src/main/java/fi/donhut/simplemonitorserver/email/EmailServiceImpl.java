@@ -64,7 +64,9 @@ public class EmailServiceImpl implements EmailService {
         message.setTo(emailTo);
         message.setSubject(subject);
         message.setText(content);
+        LOG.info("Sending email to {}...", emailTo);
         emailSender.send(message);
+        LOG.info("Email sent to {} with subject '{}'.", emailTo, subject);
     }
 
     @Async

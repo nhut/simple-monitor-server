@@ -46,7 +46,7 @@ public final class OfflineMonitorTask {
     @Value("${app.monitor.count-as-offline.seconds}")
     private int seconds;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedDelay = 10000)
     public void computerStatusMonitor() {
         LOG.trace("Running...");
         final Map<String, MonitorData> cache = UnderMonitorCache.getInstance().getCache();
@@ -67,6 +67,7 @@ public final class OfflineMonitorTask {
     }
 
     private boolean isGoneOffline(LocalDateTime lastDataReceived) {
-        return lastDataReceived.plusSeconds(seconds).isAfter(LocalDateTime.now());
+        final LocalDateTime currentTime = LocalDateTime.now();
+        return currentTime.isAfter(lastDataReceived.plusSeconds(seconds));
     }
 }
