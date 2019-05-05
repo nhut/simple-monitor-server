@@ -28,6 +28,12 @@ HELP.md
 /.nb-gradle/
 /build/
 
+### Visual Studio Code ###
+.vscode
+
+### Inno setup compiler ###
+Output
+
 # Log file
 *.log
 
