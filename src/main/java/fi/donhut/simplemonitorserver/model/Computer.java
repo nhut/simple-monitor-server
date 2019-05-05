@@ -17,13 +17,13 @@ package fi.donhut.simplemonitorserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.StringJoiner;
+import javax.validation.constraints.NotNull;
 
 /**
- * Model.
+ * Model for general computers.
  *
  * @author Nhut Do (mr.nhut@gmail.com)
  */
@@ -44,44 +44,44 @@ public class Computer implements Serializable {
         return name;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public Double getCpuLoadPercent() {
-        return cpuLoadPercent;
-    }
-
-    public Long getMemoryUsageInBytes() {
-        return memoryUsageInBytes;
-    }
-
-    public Long getFreeSpaceLeftInBytes() {
-        return freeSpaceLeftInBytes;
-    }
-
-    public LocalDateTime getLastReceivedTime() {
-        return lastReceivedTime;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
     }
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
+    public Double getCpuLoadPercent() {
+        return cpuLoadPercent;
+    }
+
     public void setCpuLoadPercent(Double cpuLoadPercent) {
         this.cpuLoadPercent = cpuLoadPercent;
+    }
+
+    public Long getMemoryUsageInBytes() {
+        return memoryUsageInBytes;
     }
 
     public void setMemoryUsageInBytes(Long memoryUsageInBytes) {
         this.memoryUsageInBytes = memoryUsageInBytes;
     }
 
+    public Long getFreeSpaceLeftInBytes() {
+        return freeSpaceLeftInBytes;
+    }
+
     public void setFreeSpaceLeftInBytes(Long freeSpaceLeftInBytes) {
         this.freeSpaceLeftInBytes = freeSpaceLeftInBytes;
+    }
+
+    public LocalDateTime getLastReceivedTime() {
+        return lastReceivedTime;
     }
 
     public void setLastReceivedTime(LocalDateTime lastReceivedTime) {

@@ -30,5 +30,5 @@ public interface EmailService {
      * @param monitorData {@link MonitorData}.
      * @param msgContent Message content.
      */
-    public void sendEmail(final MonitorData monitorData, final String msgContent);
+    void sendEmail(final MonitorData monitorData, final String msgContent);
 }
