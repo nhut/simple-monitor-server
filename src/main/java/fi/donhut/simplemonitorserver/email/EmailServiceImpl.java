@@ -49,7 +49,7 @@ public class EmailServiceImpl implements EmailService {
 
     @PostConstruct
     private void afterSetUp() {
-        if (emailSendEnabled && StringUtils.isEmpty(emailTo)) {
+        if (emailSendEnabled && !StringUtils.hasText(emailTo)) {
             throw new IllegalArgumentException("Email receivers (To) is NOT configured correctly!");
         }
     }
@@ -57,7 +57,7 @@ public class EmailServiceImpl implements EmailService {
     private void send(final String subject, final String content) {
         if (!emailSendEnabled) {
             LOG.info("Email send is NOT enabled. Suppose to send subject: {}, content: {}",
-                    subject, content);
+                subject, content);
             return;
         }
         SimpleMailMessage message = new SimpleMailMessage();

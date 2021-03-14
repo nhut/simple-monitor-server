@@ -28,7 +28,7 @@ public interface EmailService {
      * Sends email using {@link MonitorData}.
      *
      * @param monitorData {@link MonitorData}.
-     * @param msgContent Message content.
+     * @param msgContent  Message content.
      */
     void sendEmail(final MonitorData monitorData, final String msgContent);
 }

@@ -58,25 +58,25 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         final ApiSelectorBuilder apiSelectorBuilder = new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any()); //limit which package content will be shown in api
+            .select()
+            .apis(RequestHandlerSelectors.any()); //limit which package content will be shown in api
         final boolean hasDevProfile = Arrays.asList(environment.getActiveProfiles()).contains("dev");
         if (!(hasDevProfile && showAll)) {
             apiSelectorBuilder.paths(input -> input != null &&
-                    (input.startsWith("/api") || input.startsWith("/actuator/health"))); //limit which rest url api will be exposed
+                (input.startsWith("/api") || input.startsWith("/actuator/health"))); //limit which rest url api will be exposed
         }
 
         return apiSelectorBuilder.build()
-                .forCodeGeneration(true)
-                .apiInfo(new ApiInfo(
-                        appName + " API",
-                        "This is swagger schema is for client codegen only. Check the official documentation here: /swagger-ui.html",
-                        "v1",
-                        "https://github.com/nhut/simple-monitor-server/blob/master/LICENSE",
-                        null,
-                        "License of API",
-                        "https://github.com/nhut/simple-monitor-server/blob/master/LICENSE",
-                        Collections.emptyList()))
-                .securitySchemes(Collections.singletonList(new BasicAuth(Constants.APP_BASIC_AUTH_ID)));
+            .forCodeGeneration(true)
+            .apiInfo(new ApiInfo(
+                appName + " API",
+                "This is swagger schema is for client codegen only. Check the official documentation here: /swagger-ui.html",
+                "v1",
+                "https://github.com/nhut/simple-monitor-server/blob/master/LICENSE",
+                null,
+                "License of API",
+                "https://github.com/nhut/simple-monitor-server/blob/master/LICENSE",
+                Collections.emptyList()))
+            .securitySchemes(Collections.singletonList(new BasicAuth(Constants.APP_BASIC_AUTH_ID)));
     }
 }

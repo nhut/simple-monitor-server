@@ -47,7 +47,7 @@ public final class UnderMonitorCache {
         final MonitorData prevMonitorData = cache.get(computerName);
         if (prevMonitorData != null && cache.size() >= MAX_COMPUTER_TO_MONITOR) {
             LOG.warn("Rejected (cache limit exceeded: {} pcs) to monitor new computer: {}",
-                    MAX_COMPUTER_TO_MONITOR, computer);
+                MAX_COMPUTER_TO_MONITOR, computer);
             return;
         }
 

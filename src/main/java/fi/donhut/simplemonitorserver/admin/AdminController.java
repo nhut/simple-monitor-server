@@ -38,8 +38,7 @@ import java.util.TreeSet;
 public class AdminController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
-    private static final DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("")
     public ResponseEntity<String> getComputers() {
@@ -53,9 +52,9 @@ public class AdminController {
             final MonitorData monitorData = pcs.get(key);
             sb.append("<tr>");
             sb.append("<td>").append(monitorData.getNetworkStatus().name()).append("</td>")
-                    .append("<td>").append(key).append("</td>")
-                    .append("<td>").append(monitorData.getComputer()
-                    .getLastReceivedTime().format(DATE_TIME_FORMATTER)).append("</td>");
+                .append("<td>").append(key).append("</td>")
+                .append("<td>").append(monitorData.getComputer()
+                .getLastReceivedTime().format(DATE_TIME_FORMATTER)).append("</td>");
             sb.append("</tr>");
         }
         sb.append("</table>");

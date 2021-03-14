@@ -47,19 +47,23 @@ public final class OfflineMonitorTaskScheduler {
         LOG.trace("Running...");
         final Map<String, MonitorData> cache = UnderMonitorCache.getInstance().getCache();
         for (MonitorData monitorData : cache.values()) {
-            if (monitorData.getNetworkStatus() == NetworkStatus.ONLINE) {
-                final Computer computer = monitorData.getComputer();
-                final LocalDateTime lastDataReceived = computer.getLastReceivedTime();
-                if (isGoneOffline(lastDataReceived)) {
-                    monitorData.setNetworkStatus(NetworkStatus.OFFLINE);
-                    final String infoText = String.format(
-                            "Have gone OFFLINE! Last received data: %s", lastDataReceived);
-                    LOG.info("{}: {}", computer.getName(), infoText);
-                    emailService.sendEmail(monitorData, infoText);
-                }
-            }
+            sendEmailIfStatusChange(monitorData);
         }
         LOG.trace("Stopped.");
+    }
+
+    private void sendEmailIfStatusChange(MonitorData monitorData) {
+        if (monitorData.getNetworkStatus() == NetworkStatus.ONLINE) {
+            final Computer computer = monitorData.getComputer();
+            final LocalDateTime lastDataReceived = computer.getLastReceivedTime();
+            if (isGoneOffline(lastDataReceived)) {
+                monitorData.setNetworkStatus(NetworkStatus.OFFLINE);
+                final String infoText = String.format(
+                    "Have gone OFFLINE! Last received data: %s", lastDataReceived);
+                LOG.info("{}: {}", computer.getName(), infoText);
+                emailService.sendEmail(monitorData, infoText);
+            }
+        }
     }
 
     private boolean isGoneOffline(LocalDateTime lastDataReceived) {

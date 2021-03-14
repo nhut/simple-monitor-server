@@ -22,7 +22,7 @@ import java.util.StringJoiner;
  */
 public class MonitorData {
 
-    private Computer computer;
+    private final Computer computer;
     private NetworkStatus networkStatus;
 
     public MonitorData(Computer computer, NetworkStatus networkStatus) {
@@ -45,8 +45,8 @@ public class MonitorData {
     @Override
     public String toString() {
         return new StringJoiner(", ", MonitorData.class.getSimpleName() + "[", "]")
-                .add("computer=" + computer)
-                .add("networkStatus=" + networkStatus)
-                .toString();
+            .add("computer=" + computer)
+            .add("networkStatus=" + networkStatus)
+            .toString();
     }
 }

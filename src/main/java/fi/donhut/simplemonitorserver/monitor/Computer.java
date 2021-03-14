@@ -91,12 +91,12 @@ public class Computer implements Serializable {
     @Override
     public String toString() {
         return new StringJoiner(", ", Computer.class.getSimpleName() + "[", "]")
-                .add("name='" + name + "'")
-                .add("ipAddress='" + ipAddress + "'")
-                .add("cpuLoadPercent=" + cpuLoadPercent)
-                .add("memoryUsageInBytes=" + memoryUsageInBytes)
-                .add("freeSpaceLeftInBytes=" + freeSpaceLeftInBytes)
-                .add("lastReceivedTime=" + lastReceivedTime)
-                .toString();
+            .add("name='" + name + "'")
+            .add("ipAddress='" + ipAddress + "'")
+            .add("cpuLoadPercent=" + cpuLoadPercent)
+            .add("memoryUsageInBytes=" + memoryUsageInBytes)
+            .add("freeSpaceLeftInBytes=" + freeSpaceLeftInBytes)
+            .add("lastReceivedTime=" + lastReceivedTime)
+            .toString();
     }
 }

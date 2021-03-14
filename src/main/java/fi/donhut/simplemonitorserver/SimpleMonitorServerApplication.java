@@ -30,7 +30,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 public class SimpleMonitorServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SimpleMonitorServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SimpleMonitorServerApplication.class, args);
+    }
 }

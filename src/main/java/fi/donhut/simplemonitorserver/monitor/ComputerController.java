@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
 
 /**
  * REST API to receive outside source's data.
@@ -43,15 +42,15 @@ public class ComputerController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComputerController.class);
 
-    private final UnderMonitorCache underMonitorCache = UnderMonitorCache.getInstance();
+    private static final UnderMonitorCache underMonitorCache = UnderMonitorCache.getInstance();
 
     @Autowired
     private EmailService emailService;
 
     @PutMapping("/pc")
     @ApiOperation(value = "Receives client sent data.",
-            authorizations = {@Authorization(value= Constants.APP_BASIC_AUTH_ID)})
-    public ResponseEntity<Void> receivePcData(@NotNull @Validated @RequestBody final Computer computer) {
+        authorizations = {@Authorization(value = Constants.APP_BASIC_AUTH_ID)})
+    public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
         computer.setLastReceivedTime(LocalDateTime.now());
         final String computerName = computer.getName();
         LOG.debug("Received new data from: {}", LOG.isTraceEnabled() ? computer : computerName);
