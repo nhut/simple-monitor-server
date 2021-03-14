@@ -53,9 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder authBuilder) throws Exception {
         authBuilder.inMemoryAuthentication()
-                .withUser(userAdminUsername).password(passwordEncoder.encode(userAdminPassword)).roles(UserRole.ADMIN)
+                .withUser(userAdminUsername).password(passwordEncoder.encode(userAdminPassword)).roles(UserRole.ADMIN.getName())
                 .and()
-                .withUser(userApiUsername).password(passwordEncoder.encode(userApiPassword)).roles(UserRole.API)
+                .withUser(userApiUsername).password(passwordEncoder.encode(userApiPassword)).roles(UserRole.API.getName())
         ;
     }
 
@@ -65,9 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/actuator/health").permitAll()
-                .antMatchers("/api/**").hasRole(UserRole.API)
-                .antMatchers("/actuator/", "/actuator/info").hasRole(UserRole.ADMIN)
-                .antMatchers("/swagger-resources/*", "/swagger-ui.html", "/api/v1/swagger.json").hasRole(UserRole.ADMIN)
+                .antMatchers("/api/**").hasRole(UserRole.API.getName())
+                .antMatchers("/actuator/", "/actuator/info").hasRole(UserRole.ADMIN.getName())
+                .antMatchers("/swagger-resources/*", "/swagger-ui.html", "/api/v1/swagger.json").hasRole(UserRole.ADMIN.getName())
                 .anyRequest().authenticated()
                 .and().httpBasic();
     }

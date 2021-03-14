@@ -20,8 +20,18 @@ package fi.donhut.simplemonitorserver.config;
  *
  * @author Nhut Do (mr.nhut.dev@gmail.com)
  */
-interface UserRole {
+public enum UserRole {
 
-    String ADMIN = "ADMIN";
-    String API = "API";
+    ADMIN("ADMIN"),
+    API("API");
+
+    private final String name;
+
+    UserRole(final String roleName) {
+        this.name = roleName;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
