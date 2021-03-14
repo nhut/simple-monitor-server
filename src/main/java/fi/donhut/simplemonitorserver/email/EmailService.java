@@ -1,5 +1,5 @@
 /*
- * Copyright since 2019 Nhut Do <mr.nhut@gmail.com>
+ * Copyright since 2019 Nhut Do <mr.nhut.dev@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import fi.donhut.simplemonitorserver.monitor.MonitorData;
 /**
  * Provides email services.
  *
- * @author Nhut Do (mr.nhut@gmail.com)
+ * @author Nhut Do (mr.nhut.dev@gmail.com)
  */
 public interface EmailService {
 
