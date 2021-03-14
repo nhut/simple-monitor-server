@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fi.donhut.simplemonitorserver.rest;
+package fi.donhut.simplemonitorserver.monitor;
 
 import fi.donhut.simplemonitorserver.Constants;
 import fi.donhut.simplemonitorserver.email.EmailService;
-import fi.donhut.simplemonitorserver.model.Computer;
-import fi.donhut.simplemonitorserver.monitor.MonitorData;
-import fi.donhut.simplemonitorserver.monitor.NetworkStatus;
-import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;

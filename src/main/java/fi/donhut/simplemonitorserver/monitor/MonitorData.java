@@ -15,8 +15,6 @@
  */
 package fi.donhut.simplemonitorserver.monitor;
 
-import fi.donhut.simplemonitorserver.model.Computer;
-
 import java.util.StringJoiner;
 
 /**

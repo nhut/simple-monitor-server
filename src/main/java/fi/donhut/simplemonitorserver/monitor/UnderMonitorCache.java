@@ -15,7 +15,6 @@
  */
 package fi.donhut.simplemonitorserver.monitor;
 
-import fi.donhut.simplemonitorserver.model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

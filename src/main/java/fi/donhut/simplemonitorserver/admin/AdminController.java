@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fi.donhut.simplemonitorserver.rest;
+package fi.donhut.simplemonitorserver.admin;
 
 import fi.donhut.simplemonitorserver.monitor.MonitorData;
 import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
@@ -42,7 +42,7 @@ public class AdminController {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("")
-    private ResponseEntity<String> getComputers() {
+    public ResponseEntity<String> getComputers() {
         final Map<String, MonitorData> pcs = UnderMonitorCache.getInstance().getCache();
         if (pcs.isEmpty()) {
             return ResponseEntity.ok("No results.");
@@ -59,7 +59,7 @@ public class AdminController {
             sb.append("</tr>");
         }
         sb.append("</table>");
-        LOG.trace("Response: [}", sb.toString());
+        LOG.trace("Response: {}", sb);
         return ResponseEntity.ok(sb.toString());
     }
 }

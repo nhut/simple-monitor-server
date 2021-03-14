@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fi.donhut.simplemonitorserver.scheduler;
+package fi.donhut.simplemonitorserver.monitor;
 
 import fi.donhut.simplemonitorserver.email.EmailService;
-import fi.donhut.simplemonitorserver.model.Computer;
-import fi.donhut.simplemonitorserver.monitor.MonitorData;
-import fi.donhut.simplemonitorserver.monitor.NetworkStatus;
-import fi.donhut.simplemonitorserver.monitor.UnderMonitorCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +32,9 @@ import java.util.Map;
  * @author Nhut Do (mr.nhut.dev@gmail.com)
  */
 @Component
-public final class OfflineMonitorTask {
+public final class OfflineMonitorTaskScheduler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OfflineMonitorTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OfflineMonitorTaskScheduler.class);
 
     @Autowired
     private EmailService emailService;
