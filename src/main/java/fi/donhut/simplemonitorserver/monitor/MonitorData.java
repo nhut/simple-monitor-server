@@ -38,7 +38,7 @@ public class MonitorData {
         return networkStatus;
     }
 
-    synchronized public void setNetworkStatus(NetworkStatus networkStatus) {
+    public void setNetworkStatus(NetworkStatus networkStatus) {
         this.networkStatus = networkStatus;
     }
 

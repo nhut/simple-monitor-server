@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.StringJoiner;
-import javax.validation.constraints.NotNull;
 
 /**
  * Model for general computers.
@@ -31,7 +30,6 @@ public class Computer implements Serializable {
 
     private static final long serialVersionUID = -9088154767294581258L;
 
-    @NotNull
     private String name;
     private String ipAddress;
     private Double cpuLoadPercent;
@@ -39,6 +37,15 @@ public class Computer implements Serializable {
     private Long freeSpaceLeftInBytes;
     @JsonIgnore
     private LocalDateTime lastReceivedTime = LocalDateTime.now();
+
+    public Computer(String name, String ipAddress, Double cpuLoadPercent, Long memoryUsageInBytes, Long freeSpaceLeftInBytes, LocalDateTime lastReceivedTime) {
+        this.name = name;
+        this.ipAddress = ipAddress;
+        this.cpuLoadPercent = cpuLoadPercent;
+        this.memoryUsageInBytes = memoryUsageInBytes;
+        this.freeSpaceLeftInBytes = freeSpaceLeftInBytes;
+        this.lastReceivedTime = lastReceivedTime;
+    }
 
     public String getName() {
         return name;

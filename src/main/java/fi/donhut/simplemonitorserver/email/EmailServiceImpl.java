@@ -38,24 +38,24 @@ public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailServiceImpl.class);
 
-    @Autowired
-    public JavaMailSender emailSender;
+    private final String emailTo;
+    private final JavaMailSender emailSender;
 
-    @Value("${spring.mail.enabled:false}")
-    private boolean emailSendEnabled;
-
-    @Value("${app.mail.send.to}")
-    private String emailTo;
+    public EmailServiceImpl(@Value("${app.mail.send.to}") final String emailTo,
+                            @Autowired(required = false) final JavaMailSender emailSender) {
+        this.emailTo = emailTo;
+        this.emailSender = emailSender;
+    }
 
     @PostConstruct
     private void afterSetUp() {
-        if (emailSendEnabled && !StringUtils.hasText(emailTo)) {
+        if (isEnabled() && !StringUtils.hasText(emailTo)) {
             throw new IllegalArgumentException("Email receivers (To) is NOT configured correctly!");
         }
     }
 
     private void send(final String subject, final String content) {
-        if (!emailSendEnabled) {
+        if (!isEnabled()) {
             LOG.info("Email send is NOT enabled. Suppose to send subject: {}, content: {}",
                 subject, content);
             return;
@@ -76,5 +76,7 @@ public class EmailServiceImpl implements EmailService {
         send(subject, monitorData.toString());
     }
 
-
+    public boolean isEnabled() {
+        return emailSender != null;
+    }
 }

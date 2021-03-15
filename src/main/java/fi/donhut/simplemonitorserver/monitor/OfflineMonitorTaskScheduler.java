@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -32,27 +33,40 @@ import java.util.Map;
  * @author Nhut Do (mr.nhut.dev@gmail.com)
  */
 @Component
-public final class OfflineMonitorTaskScheduler {
+@ConditionalOnProperty(name = "spring.mail.host")
+public class OfflineMonitorTaskScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(OfflineMonitorTaskScheduler.class);
 
+    private final EmailService emailService;
+
+    private final int offlineAfterSeconds;
+
     @Autowired
-    private EmailService emailService;
+    public OfflineMonitorTaskScheduler(@Value("${app.monitor.count-as-offline.seconds}") int offlineAfterSeconds,
+                                       final EmailService emailService) {
+        this.offlineAfterSeconds = offlineAfterSeconds;
+        this.emailService = emailService;
+    }
 
-    @Value("${app.monitor.count-as-offline.seconds}")
-    private int seconds;
-
-    @Scheduled(fixedDelay = 10000)
-    public void computerStatusMonitor() {
-        LOG.trace("Running...");
-        final Map<String, MonitorData> cache = UnderMonitorCache.getInstance().getCache();
+    @Scheduled(fixedDelay = 10_000) //triggers every 10 seconds
+    void computerStatusMonitor() {
+        if (!emailService.isEnabled()) {
+            return;
+        }
+        LOG.info("Running...");
+        final Map<String, MonitorData> cache = getUnderMonitorCache().getCache();
         for (MonitorData monitorData : cache.values()) {
             sendEmailIfStatusChange(monitorData);
         }
         LOG.trace("Stopped.");
     }
 
-    private void sendEmailIfStatusChange(MonitorData monitorData) {
+    UnderMonitorCache getUnderMonitorCache() {
+        return UnderMonitorCache.getInstance();
+    }
+
+    private void sendEmailIfStatusChange(final MonitorData monitorData) {
         if (monitorData.getNetworkStatus() == NetworkStatus.ONLINE) {
             final Computer computer = monitorData.getComputer();
             final LocalDateTime lastDataReceived = computer.getLastReceivedTime();
@@ -66,8 +80,8 @@ public final class OfflineMonitorTaskScheduler {
         }
     }
 
-    private boolean isGoneOffline(LocalDateTime lastDataReceived) {
+    private boolean isGoneOffline(final LocalDateTime lastDataReceived) {
         final LocalDateTime currentTime = LocalDateTime.now();
-        return currentTime.isAfter(lastDataReceived.plusSeconds(seconds));
+        return currentTime.isAfter(lastDataReceived.plusSeconds(offlineAfterSeconds));
     }
 }

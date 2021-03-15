@@ -31,4 +31,6 @@ public interface EmailService {
      * @param msgContent  Message content.
      */
     void sendEmail(final MonitorData monitorData, final String msgContent);
+
+    boolean isEnabled();
 }

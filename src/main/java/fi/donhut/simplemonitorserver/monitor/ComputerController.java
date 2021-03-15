@@ -37,35 +37,44 @@ import java.time.LocalDateTime;
  * @author Nhut Do (mr.nhut.dev@gmail.com)
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/pc")
 public class ComputerController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComputerController.class);
 
-    private static final UnderMonitorCache underMonitorCache = UnderMonitorCache.getInstance();
+    private final EmailService emailService;
 
     @Autowired
-    private EmailService emailService;
+    public ComputerController(final EmailService emailService) {
+        this.emailService = emailService;
+    }
 
-    @PutMapping("/pc")
+    @PutMapping("")
     @ApiOperation(value = "Receives client sent data.",
         authorizations = {@Authorization(value = Constants.APP_BASIC_AUTH_ID)})
     public ResponseEntity<Void> receivePcData(@Validated @RequestBody final Computer computer) {
         computer.setLastReceivedTime(LocalDateTime.now());
         final String computerName = computer.getName();
         LOG.debug("Received new data from: {}", LOG.isTraceEnabled() ? computer : computerName);
-        final boolean computerBackOnline = isComputerBackOnline(computerName);
-        underMonitorCache.add(computer);
-        if (computerBackOnline) {
-            final String infoText = "Is back ONLINE!";
-            LOG.info("{}: {}", computerName, infoText);
-            emailService.sendEmail(getMonitorDataFromCache(computerName), infoText);
+        try {
+            if (isComputerBackOnline(computerName)) {
+                final String infoText = "Is back ONLINE!";
+                LOG.info("{}: {}", computerName, infoText);
+                emailService.sendEmail(getMonitorDataFromCache(computerName), infoText);
+            }
+        } finally {
+            getUnderMonitorCache().add(computer);
         }
+
         return ResponseEntity.ok().build();
     }
 
+    UnderMonitorCache getUnderMonitorCache() {
+        return UnderMonitorCache.getInstance();
+    }
+
     private MonitorData getMonitorDataFromCache(final String computerName) {
-        return underMonitorCache.getCache().get(computerName);
+        return getUnderMonitorCache().getCache().get(computerName);
     }
 
     private boolean isComputerBackOnline(final String computerName) {
