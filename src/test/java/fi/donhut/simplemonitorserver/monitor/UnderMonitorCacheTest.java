@@ -1,15 +1,15 @@
 package fi.donhut.simplemonitorserver.monitor;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UnderMonitorCacheTest {
+class UnderMonitorCacheTest {
 
     private final UnderMonitorCache sut;
 
@@ -17,13 +17,13 @@ public class UnderMonitorCacheTest {
         sut = UnderMonitorCache.getInstance();
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         sut.reset();
     }
 
     @Test
-    public void addIntoCache_adds2ComputerIntoCache() {
+    void addIntoCache_adds2ComputerIntoCache() {
         final Map<String, MonitorData> cacheBeforeAdd = sut.getCache();
         assertTrue(cacheBeforeAdd.isEmpty());
 
@@ -45,7 +45,7 @@ public class UnderMonitorCacheTest {
     }
 
     @Test
-    public void reset_clearsCache() {
+    void reset_clearsCache() {
         addIntoCache_adds2ComputerIntoCache();
 
         sut.reset();

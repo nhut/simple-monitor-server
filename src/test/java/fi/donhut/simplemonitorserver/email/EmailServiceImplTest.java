@@ -3,18 +3,23 @@ package fi.donhut.simplemonitorserver.email;
 import fi.donhut.simplemonitorserver.monitor.Computer;
 import fi.donhut.simplemonitorserver.monitor.MonitorData;
 import fi.donhut.simplemonitorserver.monitor.NetworkStatus;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
-public class EmailServiceImplTest {
+class EmailServiceImplTest {
 
     private static final Computer PC_1 = new Computer("pc1", "10.0.0.2", 11.11, 1_000L, 1_000_000_000L, LocalDateTime.now());
 
@@ -35,7 +40,7 @@ public class EmailServiceImplTest {
     }
 
     @Test
-    public void sendEmail_sendsEmail_serviceEnabled() {
+    void sendEmail_sendsEmail_serviceEnabled() {
         final MonitorData monitorData = new MonitorData(PC_1, NetworkStatus.OFFLINE);
 
         final String subjectMsg = "Gone offline!";
@@ -51,7 +56,7 @@ public class EmailServiceImplTest {
     }
 
     @Test
-    public void sendEmail_doesNothing_serviceDisabled() {
+    void sendEmail_doesNothing_serviceDisabled() {
         sut = new EmailServiceImpl(emailTo, null);
 
         final MonitorData monitorData = new MonitorData(PC_1, NetworkStatus.OFFLINE);
@@ -63,14 +68,14 @@ public class EmailServiceImplTest {
     }
 
     @Test
-    public void isEnabled_returnsFalse_emailServiceDisabled() {
+    void isEnabled_returnsFalse_emailServiceDisabled() {
         sut = new EmailServiceImpl("", null);
 
         assertFalse(sut.isEnabled());
     }
 
     @Test
-    public void isEnabled_returnsTrue_emailServiceEnabled() {
+    void isEnabled_returnsTrue_emailServiceEnabled() {
         assertTrue(sut.isEnabled());
     }
 

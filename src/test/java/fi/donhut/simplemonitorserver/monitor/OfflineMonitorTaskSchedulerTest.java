@@ -1,15 +1,20 @@
 package fi.donhut.simplemonitorserver.monitor;
 
 import fi.donhut.simplemonitorserver.email.EmailService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class OfflineMonitorTaskSchedulerTest {
+class OfflineMonitorTaskSchedulerTest {
 
     private final int offlineInSeconds = 10;
     private final EmailService emailService;
@@ -29,13 +34,13 @@ public class OfflineMonitorTaskSchedulerTest {
         };
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         when(emailService.isEnabled()).thenReturn(true);
     }
 
     @Test
-    public void computerStatusMonitor_doesNothing_emailServiceDisabled() {
+    void computerStatusMonitor_doesNothing_emailServiceDisabled() {
         when(emailService.isEnabled()).thenReturn(false);
 
         sut.computerStatusMonitor();
@@ -45,7 +50,7 @@ public class OfflineMonitorTaskSchedulerTest {
     }
 
     @Test
-    public void computerStatusMonitor_sendsEmailOnPc2GoneOffline_computerGoneOffline() {
+    void computerStatusMonitor_sendsEmailOnPc2GoneOffline_computerGoneOffline() {
         when(emailService.isEnabled()).thenReturn(true);
 
         final LocalDateTime currentTime = LocalDateTime.now();
